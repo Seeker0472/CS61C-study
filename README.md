@@ -6,7 +6,7 @@
 
 ## Progress
 
-- [ ] Proj1
+- [x] Proj1
 - [ ] Proj2
 - [ ] Proj3
 - [ ] Proj4
