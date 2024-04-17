@@ -296,11 +296,11 @@ game_state_t *load_board(char *filename)
   FILE *fp = fopen(filename, "r");
   if (fp == NULL)
   {
-    return -1; // 打开文件失败
+    return NULL; // 打开文件失败
   }
 
   int numRows = 0; // 行数
-  char buffer[1000];
+  char buffer[1000000];
 
   // 统计行数
   while (fgets(buffer, sizeof(buffer), fp) != NULL)
@@ -314,7 +314,7 @@ game_state_t *load_board(char *filename)
   if (board == NULL)
   {
     fclose(fp);
-    return -1; // 内存分配失败
+    return NULL; // 内存分配失败
   }
   // 逐行读取数据
   for (int i = 0; i < numRows; i++)
@@ -327,7 +327,7 @@ game_state_t *load_board(char *filename)
       {
         fclose(fp);
         // TODO:加上Free
-        return -1; // 内存分配失败
+        return NULL; // 内存分配失败
       }
       strcpy(board[i], buffer);
       board[i][len - 1] = '\0'; // 移除换行符
@@ -387,6 +387,25 @@ static void find_head(game_state_t *state, unsigned int snum)
 /* Task 6.2 */
 game_state_t *initialize_snakes(game_state_t *state)
 {
-  // TODO: Implement this function.
-  return NULL;
+  int snakes_num = 0;
+  // TODO: Implement this function. 遍历,遇到尾巴调用find_head!!
+  for (int tail_y = 0; tail_y < state->num_rows; tail_y++)
+    for (int tail_x = 1; state->board[tail_y][tail_x] != '#'; tail_x++)
+      if (is_tail(state->board[tail_y][tail_x]))
+        snakes_num++;
+  state->num_snakes = snakes_num;
+  state->snakes = malloc(snakes_num * sizeof(snake_t));
+  snakes_num = 0;
+  for (int tail_y = 0; tail_y < state->num_rows; tail_y++)
+    for (int tail_x = 1; state->board[tail_y][tail_x] != '#'; tail_x++)
+      if (is_tail(state->board[tail_y][tail_x]))
+      {
+        state->snakes[snakes_num].tail_x = tail_x;
+        state->snakes[snakes_num].tail_y = tail_y;
+        state->snakes[snakes_num].live = true;
+        find_head(state, snakes_num);
+        snakes_num++;
+      }
+
+  return state;
 }

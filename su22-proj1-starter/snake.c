@@ -3,19 +3,23 @@
 #include "snake_utils.h"
 #include "state.h"
 
-int main(int argc, char* argv[]) {
-  char* in_filename = NULL;
-  char* out_filename = NULL;
-  game_state_t* state = NULL;
+int main(int argc, char *argv[])
+{
+  char *in_filename = NULL;
+  char *out_filename = NULL;
+  game_state_t *state = NULL;
 
   // Parse arguments
-  for (int i = 1; i < argc; i++) {
-    if (strcmp(argv[i], "-i") == 0 && i < argc - 1) {
+  for (int i = 1; i < argc; i++)
+  {
+    if (strcmp(argv[i], "-i") == 0 && i < argc - 1)
+    {
       in_filename = argv[i + 1];
       i++;
       continue;
     }
-    if (strcmp(argv[i], "-o") == 0 && i < argc - 1) {
+    if (strcmp(argv[i], "-o") == 0 && i < argc - 1)
+    {
       out_filename = argv[i + 1];
       i++;
       continue;
@@ -29,25 +33,50 @@ int main(int argc, char* argv[]) {
   /* Task 7 */
 
   // Read board from file, or create default board
-  if (in_filename != NULL) {
+  if (in_filename != NULL)
+  {
     // TODO: Load the board from in_filename
+    state = load_board(in_filename);
     // TODO: If the file doesn't exist, return -1
+    if (state == NULL)
+      return -1;
     // TODO: Then call initialize_snakes on the state you made
-  } else {
+    state = initialize_snakes(state);
+  }
+  else
+  {
     // TODO: Create default state
+    state = create_default_state();
   }
 
   // TODO: Update state. Use the deterministic_food function
   // (already implemented in state_utils.h) to add food.
 
+  update_state(state, deterministic_food);
+
   // Write updated board to file or stdout
-  if (out_filename != NULL) {
+  if (out_filename != NULL)
+  {
     // TODO: Save the board to out_filename
-  } else {
+    FILE *fp = fopen(out_filename, "w");
+    if (fp == NULL)
+      return -1;
+    for (int i = 0; i < state->num_rows; i++)
+    {
+      fprintf(fp, state->board[i]);
+      fprintf(fp, "\n");
+    }
+    fclose(fp);
+  }
+  else
+  {
     // TODO: Print the board to stdout
+    for (int i = 0; i < state->num_rows; i++)
+      printf(state->board[i]);
   }
 
   // TODO: Free the state
+  free_state(state);
 
   return 0;
 }
