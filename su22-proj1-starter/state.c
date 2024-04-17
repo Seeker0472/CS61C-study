@@ -294,8 +294,53 @@ void update_state(game_state_t *state, int (*add_food)(game_state_t *state))
 game_state_t *load_board(char *filename)
 {
   FILE *fp = fopen(filename, "r");
+  if (fp == NULL)
+  {
+    return -1; // 打开文件失败
+  }
 
-  return NULL;
+  int numRows = 0; // 行数
+  char buffer[1000];
+
+  // 统计行数
+  while (fgets(buffer, sizeof(buffer), fp) != NULL)
+  {
+    numRows++;
+  }
+  // 重置文件指针
+  fseek(fp, 0, SEEK_SET);
+  // 分配内存
+  char **board = (char **)malloc(numRows * sizeof(char *));
+  if (board == NULL)
+  {
+    fclose(fp);
+    return -1; // 内存分配失败
+  }
+  // 逐行读取数据
+  for (int i = 0; i < numRows; i++)
+  {
+    if (fgets(buffer, sizeof(buffer), fp) != NULL)
+    {
+      int len = strlen(buffer);
+      board[i] = (char *)malloc((len + 1) * sizeof(char));
+      if (board[i] == NULL)
+      {
+        fclose(fp);
+        // TODO:加上Free
+        return -1; // 内存分配失败
+      }
+      strcpy(board[i], buffer);
+      board[i][len - 1] = '\0'; // 移除换行符
+    }
+  }
+
+  game_state_t *state = malloc(sizeof(game_state_t));
+  state->num_rows = numRows;
+  state->board = board;
+
+  fclose(fp);
+
+  return state;
 }
 
 /*
