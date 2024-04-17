@@ -353,7 +353,34 @@ game_state_t *load_board(char *filename)
 */
 static void find_head(game_state_t *state, unsigned int snum)
 {
-  // TODO: Implement this function.
+  int target_x = state->snakes[snum].tail_x;
+  int target_y = state->snakes[snum].tail_y;
+  while (state->board[target_y][target_x] != 'W' && state->board[target_y][target_x] != 'A' &&
+         state->board[target_y][target_x] != 'S' && state->board[target_y][target_x] != 'D')
+  {
+    char res = state->board[target_y][target_x];
+    switch (state->board[target_y][target_x])
+    {
+    case 'w':
+    case '^':
+      target_y--;
+      break;
+    case 'a':
+    case '<':
+      target_x--;
+      break;
+    case 's':
+    case 'v':
+      target_y++;
+      break;
+    case 'd':
+    case '>':
+      target_x++;
+      break;
+    }
+  }
+  state->snakes[snum].head_x = target_x;
+  state->snakes[snum].head_y = target_y;
   return;
 }
 
