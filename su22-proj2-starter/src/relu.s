@@ -19,7 +19,7 @@ ebreak
 addi a2,zero,0 # a2=0
 
 # 如果小于1就直接退出
-bge a1,zero,loop_start
+blt zero,a1,loop_start
 addi a0,zero,36
 j exit
 
