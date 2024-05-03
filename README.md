@@ -25,3 +25,10 @@ make: *** [Makefile:83: valgrind-test-free-state] Error 127
 ```
 
 说明没有安装valgrind, 使用`sudo apt-get install valgrind`安装即可
+
+
+### Proj2
+
+initialize_zero.s 的测试缺了2个,目前没找到
+
+![absent](./img/zero.png)
