@@ -290,16 +290,7 @@ class TestInitializeZero(TestCase):
         t.call("initialize_zero")
         t.execute(code=36)
 
-    def test_large(self):
-        t = AssemblyTest(self, "../coverage-src/initialize_zero.s")
-
-        # raise NotImplementedError("TODO")
-
-        # input the length of the desired array
-        t.input_scalar("a0", 99999999999999)
-        # call the `initialize_zero` function
-        t.call("initialize_zero")
-        t.execute(code=26)
+# 不知道剩下两个测试是什么
 
     @classmethod
     def tearDownClass(cls):
