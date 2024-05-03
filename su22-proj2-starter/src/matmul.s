@@ -1,5 +1,5 @@
 .globl matmul
-
+# P.S.没注意到能调用dot函数
 .text
 # =======================================================
 # FUNCTION: Matrix Multiplication of 2 integer matrices
